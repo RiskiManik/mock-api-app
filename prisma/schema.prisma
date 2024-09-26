@@ -1,0 +1,51 @@
+// This is your Prisma schema file for PostgreSQL
+// Learn more about Prisma schema: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+   directUrl = env("DIRECT_URL")
+}
+
+enum METHOD {
+  POST
+  GET
+  PATCH
+  PUT
+}
+
+model MockApi {
+  id        String   @id @default(uuid()) // UUID as primary key
+  method    METHOD
+  endpoint  String
+  request   Request?  @relation(fields: [requestId], references: [id]) // Foreign key on MockApi
+  requestId String?   @unique // Ensure requestId is unique for one-to-one relation
+  response  Response? @relation(fields: [responseId], references: [id]) // Foreign key on MockApi
+  responseId String?  @unique // Ensure responseId is unique for one-to-one relation
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Request {
+  id          String   @id @default(uuid()) // UUID as primary key
+  headers     Json     // Custom headers in JSONB format
+  body        Json     // Request body in JSONB format
+  queryParams Json     // Query parameters in JSONB format
+  mockApi     MockApi? // Inverse relation (no need for references here)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Response {
+  id        String   @id @default(uuid()) // UUID as primary key
+  headers   Json     // Response headers in JSONB format
+  body      Json     // Response body in JSONB format
+  status    Int      // HTTP status code
+  mockApi   MockApi? // Inverse relation (no need for references here)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
