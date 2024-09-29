@@ -8,7 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-   directUrl = env("DIRECT_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 enum METHOD {
@@ -18,34 +18,53 @@ enum METHOD {
   PUT
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String   // This should be hashed
+  name          String?
+  subdomain     String   @unique
+  role          Role     @default(USER)
+  mockApis      MockApi[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 model MockApi {
-  id        String   @id @default(uuid()) // UUID as primary key
+  id        String   @id @default(uuid())
   method    METHOD
   endpoint  String
-  request   Request?  @relation(fields: [requestId], references: [id]) // Foreign key on MockApi
-  requestId String?   @unique // Ensure requestId is unique for one-to-one relation
-  response  Response? @relation(fields: [responseId], references: [id]) // Foreign key on MockApi
-  responseId String?  @unique // Ensure responseId is unique for one-to-one relation
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String 
+  request   Request?  @relation(fields: [requestId], references: [id])
+  requestId String?   @unique
+  response  Response? @relation(fields: [responseId], references: [id])
+  responseId String?  @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
 model Request {
-  id          String   @id @default(uuid()) // UUID as primary key
-  headers     Json     // Custom headers in JSONB format
-  body        Json     // Request body in JSONB format
-  queryParams Json     // Query parameters in JSONB format
-  mockApi     MockApi? // Inverse relation (no need for references here)
+  id          String   @id @default(uuid())
+  headers     Json    
+  body        Json    
+  queryParams Json   
+  mockApi     MockApi?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Response {
-  id        String   @id @default(uuid()) // UUID as primary key
-  headers   Json     // Response headers in JSONB format
-  body      Json     // Response body in JSONB format
-  status    Int      // HTTP status code
-  mockApi   MockApi? // Inverse relation (no need for references here)
+  id        String   @id @default(uuid())
+  headers   Json     
+  body      Json    
+  status    Int   
+  mockApi   MockApi?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
+}     

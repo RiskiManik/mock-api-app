@@ -21,6 +21,7 @@ const mockApiSchema = z.object({
   endpoint: z.string().min(1), // Endpoint URL
   request: requestSchema, // Request schema
   response: responseSchema, // Response schema
+  userId: z.string().uuid(),
 });
 
 export const mockApiRouter = createTRPCRouter({
@@ -28,11 +29,16 @@ export const mockApiRouter = createTRPCRouter({
   create: publicProcedure
     .input(mockApiSchema)
     .mutation(async ({ ctx, input }) => {
-      const { method, endpoint, request, response } = input;
+      const { method, endpoint, request, response, userId } = input;
       return await ctx.db.mockApi.create({
         data: {
           method,
           endpoint,
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
           request: {
             create: request as Prisma.RequestCreateWithoutMockApiInput,
           },

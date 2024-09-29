@@ -1,5 +1,6 @@
 import { mockApiRouter } from "@/server/api/routers/mock-api";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
+import { authRouter } from "./routers/auth-api";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: mockApiRouter,
+  auth: authRouter,
 });
 
 // export type definition of API
