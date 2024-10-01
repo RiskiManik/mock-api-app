@@ -8,6 +8,7 @@ const PUBLIC_FILE = /\.(.*)$/; // Files
 export async function middleware(req: NextRequest) {
   // Clone the URL
   const url = req.nextUrl.clone();
+
   // Skip public files
   if (
     PUBLIC_FILE.test(url.pathname) ||
@@ -23,12 +24,13 @@ export async function middleware(req: NextRequest) {
   if (subdomain === host?.split(".")[0]) return NextResponse.next();
 
   if (subdomain) {
-    // Subdomain available, rewriting
+    // Rewrite ke /app/[subdomain] sesuai dengan subdomain yang valid
     console.log(
-      `>>> Rewriting: ${url.pathname} to /${subdomain}${url.pathname}`,
+      `>>> Rewriting: ${url.pathname} to /app/${subdomain}${url.pathname === "/" ? "" : url.pathname}`,
     );
-    url.pathname = `/${subdomain}${url.pathname}`;
+    url.pathname = `/app/${subdomain}${url.pathname === "/" ? "" : url.pathname}`;
+    return NextResponse.rewrite(url);
   }
 
-  return NextResponse.rewrite(url);
+  return NextResponse.next();
 }

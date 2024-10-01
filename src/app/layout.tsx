@@ -4,7 +4,6 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 import { TRPCReactProvider } from "@/trpc/react";
-import { SidebarApp } from "@/components/SidebarDemo";
 
 export const metadata: Metadata = {
   title: "Mock Api App",
@@ -19,7 +18,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          <SidebarApp>{children}</SidebarApp>
+          {children}
           <Toaster />
         </TRPCReactProvider>
       </body>

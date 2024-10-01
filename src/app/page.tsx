@@ -1,11 +1,13 @@
-import dynamic from "next/dynamic";
+import { HeroHighlightSection } from "@/components/hero";
+import Navbar from "@/components/Navbar";
 
-const HomeApp = dynamic(() => import("@/features/home"), { ssr: false });
+// const HomeApp = dynamic(() => import("@/components/hero"), { ssr: false });
 const Home = () => {
   return (
-    <div>
-      <HomeApp />
-    </div>
+    <main>
+      <Navbar />
+      <HeroHighlightSection />
+    </main>
   );
 };
 
