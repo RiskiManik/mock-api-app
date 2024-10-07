@@ -1,7 +1,7 @@
 import { compareJsonKeys } from "@/lib/compare-json";
 import { getValidSubdomain } from "@/lib/subdomain";
 import { db } from "@/server/db";
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const GET = async (

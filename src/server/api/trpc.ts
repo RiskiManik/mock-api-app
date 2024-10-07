@@ -64,6 +64,7 @@ const authMiddleware = t.middleware(async ({ ctx, next }) => {
       userId: string;
       email: string;
       role: string;
+      subdomain: string;
     };
 
     // Add user to context directly from the decoded token
@@ -74,6 +75,7 @@ const authMiddleware = t.middleware(async ({ ctx, next }) => {
           id: decoded.userId,
           email: decoded.email,
           role: decoded.role,
+          subdomain: decoded.subdomain,
         },
       },
     });

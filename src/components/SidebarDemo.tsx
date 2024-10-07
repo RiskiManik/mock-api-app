@@ -82,7 +82,7 @@ export function SidebarApp({ children }: { children: React.ReactNode }) {
           </div>
         </SidebarBody>
       </Sidebar>
-      <section className="w-full rounded-lg border-l border-neutral-200 p-4 dark:bg-neutral-900">
+      <section className="max-h-screen w-full overflow-auto rounded-lg border-l border-neutral-200 p-4 dark:bg-neutral-900">
         {children}
       </section>
     </div>

@@ -88,6 +88,7 @@ export const authRouter = createTRPCRouter({
         {
           userId: user.id,
           email: user.email,
+          subdomain: user.subdomain,
           role: user.role,
         },
         JWT_SECRET,
@@ -108,12 +109,13 @@ export const authRouter = createTRPCRouter({
   // Get current user
   getCurrentUser: protectedProcedure.query(({ ctx }) => {
     // The user information is now available directly from the context
-    const { id, email, role } = ctx.user;
+    const { id, email, role, subdomain } = ctx.user;
 
     return createApiResponse(true, "User retrieved successfully", {
       id,
       email,
       role,
+      subdomain,
     });
   }),
 });
